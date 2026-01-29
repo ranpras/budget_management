@@ -27,7 +27,7 @@ export function Dashboard() {
 
   const budgetTotals = useMemo(() => {
     const approvedBudgets = store.budgets.filter(
-      (b) => b.fiscalYear === Number(selectedYear) && b.status === BudgetStatus.APPROVED,
+      (b) => b.fiscalYear === Number(selectedYear) && (b.status === BudgetStatus.ACTIVE || b.status === "active"),
     )
 
     let totalBudget = 0
@@ -82,7 +82,7 @@ export function Dashboard() {
 
       // Calculate actual for this month
       const approvedBudgets = store.budgets.filter(
-        (b) => b.fiscalYear === Number(selectedYear) && b.status === BudgetStatus.APPROVED,
+        (b) => b.fiscalYear === Number(selectedYear) && (b.status === BudgetStatus.ACTIVE || b.status === "active"),
       )
       const monthActual = approvedBudgets.reduce((sum, budget) => {
         const monthTransactions = store.actuals.filter((a) => {
