@@ -1,6 +1,6 @@
-import { useMasterDataStore } from "./master-data-store"
-import { UserRole } from "./master-data-types"
-import type { AppUser } from "./master-data-types"
+import { useMasterDataStore } from "@/lib/master-data-store"
+import { UserRole } from "@/lib/master-data-types"
+import type { AppUser } from "@/lib/master-data-types"
 
 // Helper functions for role-based logic
 export function useCurrentUser(): AppUser | null {
@@ -14,21 +14,22 @@ export function useUserRole(): UserRole | null {
 }
 
 export function isOperator(user: AppUser | null): boolean {
-  return user?.role === UserRole.OPERATOR
+  return user?.role === UserRole.OPERATOR || user?.role === "operator"
 }
 
 export function isApproval(user: AppUser | null): boolean {
-  return user?.role === UserRole.APPROVAL
+  return user?.role === UserRole.SUPERVISOR || user?.role === "supervisor"
 }
 
 export function isFinance(user: AppUser | null): boolean {
-  return user?.role === UserRole.FINANCE
+  return user?.role === UserRole.ADMIN_BUDGET || user?.role === "admin_budget"
 }
 
 export function canAccessUnitData(user: AppUser | null, targetUnitId: string): boolean {
   if (!user) return false
-  if (user.role === UserRole.FINANCE) return true // Finance sees all
-  if (user.role === UserRole.OPERATOR || user.role === UserRole.APPROVAL) {
+  const role = user.role as string
+  if (role === UserRole.ADMIN_BUDGET || role === "admin_budget") return true // Finance sees all
+  if ((role === UserRole.OPERATOR || role === "operator" || role === UserRole.SUPERVISOR || role === "supervisor")) {
     return user.unitId === targetUnitId
   }
   return false
