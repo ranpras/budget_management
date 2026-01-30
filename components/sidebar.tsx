@@ -11,10 +11,16 @@ import {
   ClipboardList,
   Settings,
   LogOut,
+  DollarSign,
+  TrendingUp,
+  Receipt,
+  BookOpen,
+  Database,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/lib/auth-store"
 import { cn } from "@/lib/utils"
+import { UserRole } from "@/lib/master-data-types"
 
 interface SidebarProps {
   currentScreen: string
@@ -25,19 +31,58 @@ export function Sidebar({ currentScreen, onNavigate }: SidebarProps) {
   const { logout } = useAuthStore()
   const user = useAuthStore((state) => state.getCurrentUser())
 
-  const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "budget-planning", label: "Budget Planning", icon: FileText },
-    { id: "budget-revision", label: "Budget Revision", icon: RefreshCw },
-    { id: "spending-request", label: "Spending Request", icon: Send },
-    { id: "actual-realization", label: "Actual Realization", icon: BarChart3 },
-    { id: "budget-vs-actual", label: "Budget vs Actual", icon: BarChart3 },
-    { id: "finance-approval", label: "Finance Approval", icon: CheckCircle },
-    { id: "approval-inbox", label: "Approval Inbox", icon: Inbox },
-    { id: "my-submissions", label: "My Submissions", icon: ClipboardList },
-    { id: "transaction-ledger", label: "Transaction Ledger", icon: FileText },
-    { id: "master-data", label: "Master Data", icon: Settings },
-  ]
+  // Icon map for dynamic rendering
+  const iconMap: Record<string, any> = {
+    BarChart3,
+    DollarSign,
+    TrendingUp,
+    Receipt,
+    FileText,
+    CheckCircle,
+    Inbox,
+    BookOpen,
+    Database,
+  }
+
+  // Get role-based menu items
+  const getMenuItems = () => {
+    const userRole = user?.role
+    
+    switch (userRole) {
+      case UserRole.OPERATOR:
+      case "operator":
+        return [
+          { id: "dashboard", label: "Dashboard", icon: "BarChart3" },
+          { id: "budget-planning", label: "Budget Input", icon: "DollarSign" },
+          { id: "spending-request", label: "SPK", icon: "Send" },
+          { id: "actual-realization", label: "Actual Realization", icon: "Receipt" },
+          { id: "budget-vs-actual", label: "Monitoring", icon: "BarChart3" },
+        ]
+      case UserRole.SUPERVISOR:
+      case "supervisor":
+        return [
+          { id: "dashboard", label: "Dashboard", icon: "BarChart3" },
+          { id: "approval-inbox", label: "Approval Queue", icon: "CheckCircle" },
+          { id: "budget-vs-actual", label: "Monitoring", icon: "BarChart3" },
+        ]
+      case UserRole.ADMIN_BUDGET:
+      case "admin_budget":
+        return [
+          { id: "dashboard", label: "Dashboard", icon: "BarChart3" },
+          { id: "budget-planning", label: "Budget Management", icon: "DollarSign" },
+          { id: "finance-approval", label: "Approvals", icon: "CheckCircle" },
+          { id: "budget-vs-actual", label: "Monitoring", icon: "BarChart3" },
+          { id: "transaction-ledger", label: "Transaction Ledger", icon: "BookOpen" },
+          { id: "master-data", label: "Master Data", icon: "Database" },
+        ]
+      default:
+        return [
+          { id: "dashboard", label: "Dashboard", icon: "BarChart3" },
+        ]
+    }
+  }
+
+  const menuItems = getMenuItems()
 
   return (
     <aside className="w-64 border-r border-border bg-card">
@@ -51,7 +96,7 @@ export function Sidebar({ currentScreen, onNavigate }: SidebarProps) {
         {/* Navigation Menu */}
         <nav className="flex-1 space-y-2 p-4">
           {menuItems.map((item) => {
-            const Icon = item.icon
+            const Icon = iconMap[item.icon] || LayoutDashboard
             const isActive = currentScreen === item.id
 
             return (
