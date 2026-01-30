@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { useBudgetStore } from "@/lib/store"
 import { useMasterDataStore } from "@/lib/master-data-store"
 import { useCurrentUser } from "@/lib/user-context"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/lib/hooks/use-toast"
 import type { Budget, BudgetRevision, Commitment, ActualPayment } from "@/lib/types"
 import { CheckCircle, AlertCircle } from "lucide-react"
 

@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { CheckCircle2, XCircle, Clock, Eye, AlertCircle } from "lucide-react"
 import { useBudgetStore } from "@/lib/store"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/lib/hooks/use-toast"
 import { useCurrentUser } from "@/lib/user-context"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
