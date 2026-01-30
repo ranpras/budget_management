@@ -1,29 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useAuthStore } from "@/lib/auth-store"
-import { useMasterDataStore } from "@/lib/master-data-store"
-import { Login } from "@/components/screens/login"
-import { Header } from "@/components/header"
-import { Sidebar } from "@/components/sidebar"
-import { Dashboard } from "@/components/screens/dashboard"
-import { BudgetPlanning } from "@/components/screens/budget-planning"
-import { BudgetRevision } from "@/components/screens/budget-revision"
-import { SpendingRequest } from "@/components/screens/spending-request"
-import { ActualRealization } from "@/components/screens/actual-realization"
-import { BudgetVsActual } from "@/components/screens/budget-vs-actual"
-import { FinanceApproval } from "@/components/screens/finance-approval"
-import { TransactionLedger } from "@/components/screens/transaction-ledger"
-import { MasterData } from "@/components/screens/master-data"
-import { ApprovalInbox } from "@/components/screens/approval-inbox"
-import { MySubmissions } from "@/components/screens/my-submissions"
+import { Suspense } from "react"
+import AppContent from "@/components/app-content"
 
 export default function Home() {
-  const [currentScreen, setCurrentScreen] = useState("dashboard")
-  const [mounted, setMounted] = useState(false)
-  const { isAuthenticated, theme } = useAuthStore()
-  const setCurrentUser = useMasterDataStore((state) => state.setCurrentUser)
-  const currentUser = useAuthStore((state) => state.getCurrentUser())
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+      <AppContent />
+    </Suspense>
+  )
+}
 
   useEffect(() => {
     setMounted(true)
