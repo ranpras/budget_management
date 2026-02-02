@@ -24,7 +24,7 @@ export function Toaster() {
                 <ToastDescription>{description}</ToastDescription>
               )}
             </div>
-            {action}
+            {action && typeof action === 'object' && 'type' in action ? action : null}
             <ToastClose />
           </Toast>
         )
